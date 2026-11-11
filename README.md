@@ -21,3 +21,5 @@
 **Honest note on the million-dollar question:** This MVP proves the concept and the code is real, but an app only becomes a business with distribution, content depth (hundreds of past questions per course), trust systems and repeat usage. The realistic path: launch on your own campus, add past questions for your department, charge vendors a small listing fee or run sponsored event slots, then expand campus by campus. No app is a guaranteed million dollars; this one has a real market behind it and costs nothing to test.
 
 **Next steps to grow it:** backend with accounts, real past-question database per course, vendor verification, event ticket sales, push notifications.
+
+commited by black diamond 
