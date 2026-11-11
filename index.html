@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CampusOS — Nigeria's Campus Super-App</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b3d2e">
+<link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">🎓 Campus<span>OS</span></div>
+  <div class="top-actions">
+    <select id="campusSelect" title="Campus"></select>
+    <button id="installBtn" class="hide">⬇ Install</button>
+  </div>
+</header>
+
+<main id="appView">
+  <!-- HOME -->
+  <section id="view-home" class="view active">
+    <div class="hero">
+      <div class="hero-kicker" id="heroCampus">UNILAG · Akoka, Lagos</div>
+      <h1 id="heroGreeting">Good day, student 👋</h1>
+      <p>Your timetable, campus map, marketplace, events and CBT practice — everything in one place, built for Nigerian campuses.</p>
+      <div class="hero-cta">
+        <button class="btn primary" data-nav="map">🗺 Explore campus map</button>
+        <button class="btn ghost" data-nav="cbt">📝 Practice CBT now</button>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat"><b id="statClasses">0</b><span>classes this week</span></div>
+      <div class="stat"><b id="statListings">0</b><span>items for sale</span></div>
+      <div class="stat"><b id="statEvents">0</b><span>events upcoming</span></div>
+      <div class="stat"><b id="statBest">—</b><span>best CBT score</span></div>
+    </div>
+
+    <h2 class="section-title">Today's classes</h2>
+    <div id="todayClasses" class="list"></div>
+
+    <h2 class="section-title">Quick actions</h2>
+    <div class="quick-grid">
+      <button data-nav="map"><span>🗺</span>Map</button>
+      <button data-nav="timetable"><span>🗓</span>Timetable</button>
+      <button data-nav="market"><span>🛒</span>Marketplace</button>
+      <button data-nav="events"><span>🎉</span>Events</button>
+      <button data-nav="cbt"><span>📝</span>CBT Practice</button>
+      <button data-nav="cgpa"><span>📊</span>CGPA Calc</button>
+    </div>
+  </section>
+
+  <!-- MAP -->
+  <section id="view-map" class="view">
+    <h1 class="page-title">Campus map</h1>
+    <p class="muted">Tap a marker to see details. Use "Plan route" to get walking directions between two places.</p>
+    <div class="map-wrap">
+      <svg id="campusSvg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="Campus map"></svg>
+      <div id="mapPins"></div>
+    </div>
+    <div class="card" id="placeDetail">
+      <h3>Select a place</h3>
+      <p class="muted">Tap any pin on the map.</p>
+    </div>
+    <h2 class="section-title">Plan a route</h2>
+    <div class="card row">
+      <div>
+        <label>From</label>
+        <select id="routeFrom"></select>
+      </div>
+      <div>
+        <label>To</label>
+        <select id="routeTo"></select>
+      </div>
+    </div>
+    <div class="card" id="routeResult" style="margin-top:12px"></div>
+    <h2 class="section-title">All places</h2>
+    <div id="placesList" class="list"></div>
+  </section>
+
+  <!-- TIMETABLE -->
+  <section id="view-timetable" class="view">
+    <h1 class="page-title">My timetable</h1>
+    <p class="muted">Add your classes once, never lose them again. Saved on your phone.</p>
+    <div class="card">
+      <h3>Add a class</h3>
+      <div class="form-grid">
+        <label>Day <select id="ttDay"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option></select></label>
+        <label>Course code <input id="ttCode" placeholder="e.g. CMP 326"></label>
+        <label>Title <input id="ttTitle" placeholder="e.g. Distributed Computing"></label>
+        <label>Venue <input id="ttVenue" placeholder="e.g. LT"></label>
+        <label>From <input id="ttFrom" type="time" value="10:00"></label>
+        <label>To <input id="ttTo" type="time" value="11:30"></label>
+      </div>
+      <button class="btn primary" id="ttAddBtn" style="margin-top:10px">➕ Add class</button>
+    </div>
+    <div id="ttList" class="list" style="margin-top:14px"></div>
+    <button class="btn danger-ghost" id="ttClearBtn">🗑 Clear timetable</button>
+  </section>
+
+  <!-- MARKETPLACE -->
+  <section id="view-market" class="view">
+    <h1 class="page-title">Campus marketplace</h1>
+    <p class="muted">Buy and sell with verified students on your campus. Chat on WhatsApp, meet in a public spot, inspect before you pay.</p>
+    <div class="card">
+      <h3>Sell something</h3>
+      <div class="form-grid">
+        <label>Title <input id="mkTitle" placeholder="e.g. Used textbook"></label>
+        <label>Price (₦) <input id="mkPrice" type="number" min="0" placeholder="5000"></label>
+        <label>Category
+          <select id="mkCat"><option>Books</option><option>Gadgets</option><option>Hostel</option><option>Services</option><option>Other</option></select>
+        </label>
+        <label>Condition
+          <select id="mkCond"><option>New</option><option>Good</option><option>Very good</option><option>Service</option></select>
+        </label>
+        <label style="grid-column:1/-1">Note <input id="mkNote" placeholder="Short description"></label>
+        <label style="grid-column:1/-1">Your WhatsApp number <input id="mkPhone" placeholder="23480..."></label>
+      </div>
+      <button class="btn primary" id="mkAddBtn" style="margin-top:10px">➕ List item</button>
+    </div>
+    <div class="filter-row">
+      <select id="mkFilter"><option value="">All categories</option><option>Books</option><option>Gadgets</option><option>Hostel</option><option>Services</option><option>Other</option></select>
+      <input id="mkSearch" placeholder="🔍 Search items...">
+    </div>
+    <div id="mkList" class="list" style="margin-top:12px"></div>
+  </section>
+
+  <!-- EVENTS -->
+  <section id="view-events" class="view">
+    <h1 class="page-title">Campus events</h1>
+    <p class="muted">Never miss a dinner, hackathon or career fair again.</p>
+    <div class="card">
+      <h3>Add an event</h3>
+      <div class="form-grid">
+        <label>Title <input id="evTitle" placeholder="Event title"></label>
+        <label>Date <input id="evDate" type="date"></label>
+        <label>Time <input id="evTime" type="time" value="18:00"></label>
+        <label>Venue <input id="evVenue" placeholder="Venue"></label>
+        <label style="grid-column:1/-1">Description <input id="evDesc" placeholder="Short description"></label>
+      </div>
+      <button class="btn primary" id="evAddBtn" style="margin-top:10px">➕ Add event</button>
+    </div>
+    <div id="evList" class="list" style="margin-top:14px"></div>
+  </section>
+
+  <!-- CBT -->
+  <section id="view-cbt" class="view">
+    <h1 class="page-title">CBT practice</h1>
+    <p class="muted">Exam-style practice with a timer, like JAMB CBT. Pick a subject or mix everything.</p>
+    <div id="cbtSetup" class="card">
+      <label>Subject
+        <select id="cbtSubject">
+          <option value="">Mixed (all subjects)</option>
+        </select>
+      </label>
+      <label style="margin-top:8px">Number of questions
+        <select id="cbtCount"><option>5</option><option selected>10</option><option>20</option></select>
+      </label>
+      <label style="margin-top:8px">Time per question (seconds)
+        <select id="cbtTimer"><option value="0">No timer</option><option value="30">30s</option><option value="60" selected>60s</option><option value="90">90s</option></select>
+      </label>
+      <button class="btn primary" id="cbtStartBtn" style="margin-top:12px;width:100%">▶ Start practice</button>
+      <div id="cbtHistory" style="margin-top:14px"></div>
+    </div>
+
+    <div id="cbtRun" class="hide">
+      <div class="cbt-hud">
+        <span id="cbtProgress">Q 1/10</span>
+        <span id="cbtTimerLabel">⏱ 10:00</span>
+        <span id="cbtScoreLive">✅ 0</span>
+      </div>
+      <div class="progress-bar"><div id="cbtBar"></div></div>
+      <div class="card">
+        <div id="cbtSubjectTag" class="tag"></div>
+        <h3 id="cbtQuestion"></h3>
+        <div id="cbtOptions"></div>
+        <div id="cbtExplain" class="explain hide"></div>
+      </div>
+      <div class="row between">
+        <button class="btn ghost" id="cbtPrevBtn">← Previous</button>
+        <button class="btn primary" id="cbtNextBtn">Next →</button>
+      </div>
+      <button class="btn danger-ghost" id="cbtEndBtn" style="margin-top:10px">■ End & see result</button>
+    </div>
+
+    <div id="cbtResult" class="hide"></div>
+  </section>
+
+  <!-- CGPA -->
+  <section id="view-cgpa" class="view">
+    <h1 class="page-title">CGPA calculator</h1>
+    <p class="muted">Enter your courses and grades. We work out your GPA and CGPA instantly.</p>
+    <div class="card">
+      <div id="cgpaRows"></div>
+      <button class="btn ghost" id="cgpaAddBtn">➕ Add course</button>
+      <div class="form-grid" style="margin-top:14px">
+        <label>Previous CGPA (optional) <input id="cgpaPrev" type="number" step="0.01" min="0" max="5" placeholder="e.g. 3.20"></label>
+        <label>Previous credit units <input id="cgpaPrevUnits" type="number" min="0" placeholder="e.g. 45"></label>
+      </div>
+      <button class="btn primary" id="cgpaCalcBtn" style="margin-top:12px;width:100%">🧮 Calculate CGPA</button>
+    </div>
+    <div id="cgpaResult" class="card hide" style="margin-top:14px"></div>
+  </section>
+</main>
+
+<nav class="tabbar" id="tabbar">
+  <button data-nav="home" class="active"><span>🏠</span>Home</button>
+  <button data-nav="map"><span>🗺</span>Map</button>
+  <button data-nav="timetable"><span>🗓</span>Classes</button>
+  <button data-nav="market"><span>🛒</span>Market</button>
+  <button data-nav="events"><span>🎉</span>Events</button>
+  <button data-nav="cbt"><span>📝</span>CBT</button>
+  <button data-nav="cgpa"><span>📊</span>CGPA</button>
+</nav>
+
+<div id="toast"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
